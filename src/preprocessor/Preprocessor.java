@@ -53,6 +53,64 @@ public class Preprocessor
 		
 		analyze();
 	}
+	
+	//
+	// Construct all segments inductively from the base segments
+	//
+	private Set<Segment> constructAllNonMinimalSegments(Set<Segment> allMinimalSegments) {
+        Set<Segment> allSegments = new HashSet<>(allMinimalSegments);
+        Set<Segment> newSegments = new HashSet<>();
+
+        // For each minimal segment, generate all possible subsegments
+        for (Segment s1 : allMinimalSegments) {
+            for (Segment s2 : allMinimalSegments) {
+                if (s1.equals(s2)) {
+                    continue;
+                }
+
+                Point p1 = s1.getPoint1();
+                Point p2 = s1.getPoint2();
+                Point p3 = s2.getPoint1();
+                Point p4 = s2.getPoint2();
+
+                // If two minimal segments share a common point, they must be non-minimal
+                if (p1.equals(p3)) {
+                    newSegments.add(new Segment(p2, p4));
+                } else if (p1.equals(p4)) {
+                    newSegments.add(new Segment(p2, p3));
+                } else if (p2.equals(p3)) {
+                    newSegments.add(new Segment(p1, p4));
+                } else if (p2.equals(p4)) {
+                    newSegments.add(new Segment(p1, p3));
+                }
+            }
+        }
+        allSegments.addAll(newSegments);
+        return allSegments;
+	}
+	//
+	// Combine the given minimal segments and implicit segments into a true set of minimal segments
+	//     *givenSegments may not be minimal
+	//     * implicitSegmen
+	//
+
+	private Set<Segment> identifyAllMinimalSegments(Set<Point> implicitPoints, Set<Segment> givenSegments,
+	        Set<Segment> implicitSegments) {
+
+	    // Create a set of minimal segments
+	    Set<Segment> minimalSegments = new LinkedHashSet<>();
+
+	    
+
+	    return minimalSegments;
+	}
+
+	// Compute all implicit segments attributed to implicit points
+	private Set<Segment> computeImplicitBaseSegments(Set<Point> implicitPoints) {
+	    Set<Segment> implicitSegments = new HashSet<>();
+	    
+	    return implicitSegments;
+	}
 
 	/**
 	 * Invoke the precomputation procedure.
@@ -87,4 +145,6 @@ public class Preprocessor
 		_allMinimalSegments.forEach((segment) -> _segmentDatabase.put(segment, segment));
 		_nonMinimalSegments.forEach((segment) -> _segmentDatabase.put(segment, segment));
 	}
+
+	
 }
