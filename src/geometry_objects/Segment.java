@@ -71,7 +71,13 @@ public class Segment extends GeometricObject
 	 */
 	public boolean HasSubSegment(Segment candidate)
 	{
-        // TODO
+		
+        if(pointLiesOnSegment(candidate.getPoint1()) && pointLiesOnSegment(candidate.getPoint2()))
+        {
+        	return true;
+        }
+        
+        return false;
 	}
 
 	/**
@@ -160,7 +166,12 @@ public class Segment extends GeometricObject
 	 */
 	public boolean coincideWithoutOverlap(Segment that)
 	{
+        if (this.segmentIntersection(that) != null)
+        {
+        	return false;
+        }
         
+        return true;
 	}
 	
 	/**
@@ -183,8 +194,14 @@ public class Segment extends GeometricObject
 	public SortedSet<Point> collectOrderedPointsOnSegment(Set<Point> points)
 	{
 		SortedSet<Point> pointsOn = new TreeSet<Point>();
-
-        // TODO
+		
+		for(Point point : points)
+		{
+			if(pointLiesOnSegment(point)) 
+			{
+				pointsOn.add(point);
+			}
+		}
 
 		return pointsOn;
 	}
