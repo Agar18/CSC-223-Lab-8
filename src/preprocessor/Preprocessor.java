@@ -62,7 +62,7 @@ public class Preprocessor
 	//
 	// Construct all segments inductively from the base segments
 	//
-	private Set<Segment> constructAllNonMinimalSegments(Set<Segment> allMinimalSegments) {
+	public Set<Segment> constructAllNonMinimalSegments(Set<Segment> allMinimalSegments) {
         Set<Segment> allSegments = new HashSet<>(allMinimalSegments);
         Set<Segment> newSegments = new HashSet<>();
 
@@ -99,7 +99,7 @@ public class Preprocessor
 	//     * implicitSegmen
 	//
 
-	private Set<Segment> identifyAllMinimalSegments(Set<Point> implicitPoints, Set<Segment> givenSegments, Set<Segment> implicitSegments) {
+	public Set<Segment> identifyAllMinimalSegments(Set<Point> implicitPoints, Set<Segment> givenSegments, Set<Segment> implicitSegments) {
 	    Set<Segment> minimalSegments = new HashSet<>();
 
 	    // Check all implicit segments
@@ -135,7 +135,7 @@ public class Preprocessor
 
 
 	// Compute all implicit segments attributed to implicit points
-	private Set<Segment> computeImplicitBaseSegments(Set<Point> implicitPoints) {
+	public Set<Segment> computeImplicitBaseSegments(Set<Point> implicitPoints) {
 	    Set<Segment> implicitSegments = new HashSet<>();
 
 	    // For each pair of implicit points, create a segment
