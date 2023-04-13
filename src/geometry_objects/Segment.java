@@ -171,13 +171,21 @@ public class Segment extends GeometricObject
 	 */
 	public boolean coincideWithoutOverlap(Segment that)
 	{
-        if (this.segmentIntersection(that) != null)
-        {
-        	return false;
-        }
-        
-        return true;
+	    if (this.equals(that)) return false;
+	    if (this.isCollinearWith(that)) {
+	        // Check if the segments share an endpoint
+	        if (this.has(that.getPoint1()) || this.has(that.getPoint2())) {
+	            return true;
+	        }
+	        // Check if the segments do not overlap
+	        if (this.getPoint1().getX() > that.getPoint2().getX() ||
+	            that.getPoint1().getX() > this.getPoint2().getX()) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
+
 	
 	/**
 	 *   Example:
