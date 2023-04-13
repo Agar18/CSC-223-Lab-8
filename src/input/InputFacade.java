@@ -34,19 +34,11 @@ public class InputFacade
 	 * @return a FigureNode object corresponding to the input file.
 	 */
 	public static FigureNode extractFigure(String filepath) {
-		// Construct a new JSON parser with a DefaultBuilder
 		JSONParser parser = new JSONParser(new GeometryBuilder());
 
-		// Read the input file string
-		String input = null;
-		try {
-			input = Files.readString(Path.of(filepath));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		String figureStr = utilities.io.FileUtilities.readFileFilterComments(filepath);
 
-		// Parse the input string and return the FigureNode object
-		return (FigureNode) parser.parse(input);
+		return (FigureNode) parser.parse(figureStr);
 	}
 
 	/**
