@@ -34,12 +34,12 @@ public class Segment extends GeometricObject
 		_point1 = p1;
 		_point2 = p2;
 	}
-	 public Point[] getPoints() {
-	        Point[] points = new Point[2];
-	        points[0] = _point1;
-	        points[1] = _point2;
-	        return points;
-	    }
+	public Point[] getPoints() {
+		Point[] points = new Point[2];
+		points[0] = _point1;
+		points[1] = _point2;
+		return points;
+	}
 	/*
 	 * @param that -- a segment (as a segment: finite)
 	 * @return the midpoint of this segment (finite)
@@ -76,18 +76,18 @@ public class Segment extends GeometricObject
 	 */
 	public boolean HasSubSegment(Segment candidate)
 	{
-		
-        if(pointLiesOnSegment(candidate.getPoint1()) && pointLiesOnSegment(candidate.getPoint2()))
-        {
-        	return true;
-        }
-        
-        return false;
+
+		if(pointLiesOnSegment(candidate.getPoint1()) && pointLiesOnSegment(candidate.getPoint2()))
+		{
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
 	 * Determines if this segment and that segment share an endpoint
-	 
+
 	 * @param s -- a segment
 
 	 * @return the shared endpoint
@@ -108,7 +108,7 @@ public class Segment extends GeometricObject
 	public boolean equals(Object obj)
 	{
 		if (obj == null) return false;
-		
+
 		if (!(obj instanceof Segment)) return false;
 		Segment that = (Segment)obj;
 
@@ -162,7 +162,7 @@ public class Segment extends GeometricObject
 	 * True case:
 	 *                    this                  that
 	 *             ----------------           ===========
-     *
+	 *
 	 * True case:
 	 *                    this    that
 	 *             |----------|==========|     
@@ -171,22 +171,17 @@ public class Segment extends GeometricObject
 	 */
 	public boolean coincideWithoutOverlap(Segment that)
 	{
-	    if (this.equals(that)) return false;
-	    if (this.isCollinearWith(that)) {
-	        // Check if the segments share an endpoint
-	        if (this.has(that.getPoint1()) || this.has(that.getPoint2())) {
-	            return true;
-	        }
-	        // Check if the segments do not overlap
-	        if (this.getPoint1().getX() > that.getPoint2().getX() ||
-	            that.getPoint1().getX() > this.getPoint2().getX()) {
-	            return true;
-	        }
-	    }
-	    return false;
+		return isCollinearWith(that) && !Overlap(that);
 	}
 
-	
+	private boolean Overlap(Segment that)
+	{
+		return pointLiesBetweenEndpoints(that.getPoint1()) || pointLiesBetweenEndpoints(that.getPoint2()) ||
+				that.pointLiesBetweenEndpoints(getPoint1()) || that.pointLiesBetweenEndpoints(getPoint2());
+
+	}
+
+
 	/**
 	 *   Example:
 	 *                             Q *
@@ -196,9 +191,9 @@ public class Segment extends GeometricObject
 	 *      * Z
 	 *
 	 *  Given:
-     *	    Segment(A, D) and points {A, B, C, D, E, Q, Z},
+	 *	    Segment(A, D) and points {A, B, C, D, E, Q, Z},
 	 *      this method will return the set {A, B, C, D} in this order
-     *      since it is lexicographically sorted.
+	 *      since it is lexicographically sorted.
 	 *
 	 *      Points Q, Z, and E are NOT on the segment.
 	 *
@@ -207,7 +202,7 @@ public class Segment extends GeometricObject
 	public SortedSet<Point> collectOrderedPointsOnSegment(Set<Point> points)
 	{
 		SortedSet<Point> pointsOn = new TreeSet<Point>();
-		
+
 		for(Point point : points)
 		{
 			if(pointLiesOnSegment(point)) 

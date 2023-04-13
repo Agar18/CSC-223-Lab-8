@@ -1,5 +1,6 @@
 package preprocessor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import geometry_objects.points.Point;
@@ -58,37 +60,45 @@ public class Preprocessor
 	//
 	// Construct all segments inductively from the base segments
 	//
-	public Set<Segment> constructAllNonMinimalSegments(Set<Segment> allMinimalSegments) {
-		Set<Segment> allSegments = new HashSet<>(allMinimalSegments);
-		Set<Segment> newSegments = new HashSet<>();
-
-		// For each minimal segment, generate all possible subsegments
-		for (Segment s1 : allMinimalSegments) {
-			for (Segment s2 : allMinimalSegments) {
-				if (s1.equals(s2)) {
-					continue;
+	public Set<Segment> constructAllNonMinimalSegments(Set<Segment> allMinimalSegments) 
+	{
+Set<Segment> allNonMinimalSegments = new HashSet<Segment>();
+		
+		for (Segment seg1 : allMinimalSegments)
+		{
+			ArrayList<Segment> segmentsToAdd = new ArrayList<Segment>();
+			
+			for (Segment seg2 : allNonMinimalSegments)
+			{
+				Point pt = seg1.sharedVertex(seg2);
+				if(pt != null && seg1.coincideWithoutOverlap(seg2))
+				{
+					Point seg1Pt = seg1.other(pt);
+					Point seg2Pt = seg2.other(pt);
+					
+					segmentsToAdd.add(new Segment(seg1Pt, seg2Pt));
 				}
-
-				Point p1 = s1.getPoint1();
-				Point p2 = s1.getPoint2();
-				Point p3 = s2.getPoint1();
-				Point p4 = s2.getPoint2();
-
-				// If two minimal segments share a common point, they must be non-minimal
-				if (p1.equals(p3)) {
-					newSegments.add(new Segment(p2, p4));
-				} else if (p1.equals(p4)) {
-					newSegments.add(new Segment(p2, p3));
-				} else if (p2.equals(p3)) {
-					newSegments.add(new Segment(p1, p4));
-				} else if (p2.equals(p4)) {
-					newSegments.add(new Segment(p1, p3));
+			}
+			
+			allNonMinimalSegments.addAll(segmentsToAdd);
+			
+			for (Segment seg2 : allMinimalSegments)
+			{
+				Point pt = seg1.sharedVertex(seg2);
+				if(pt != null && seg1.coincideWithoutOverlap(seg2))
+				{
+					Point seg1Pt = seg1.other(pt);
+					Point seg2Pt = seg2.other(pt);
+					
+					allNonMinimalSegments.add(new Segment(seg1Pt, seg2Pt));
 				}
 			}
 		}
-		allSegments.addAll(newSegments);
-		return allSegments;
+		
+		return allNonMinimalSegments;
 	}
+
+
 	//
 	// Combine the given minimal segments and implicit segments into a true set of minimal segments
 	//     *givenSegments may not be minimal
@@ -96,32 +106,53 @@ public class Preprocessor
 	//
 
 	public Set<Segment> identifyAllMinimalSegments(Set<Point> implicitPoints, Set<Segment> givenSegments, Set<Segment> implicitSegments) {
-		Set<Segment> minimalSegments = new HashSet<>();
-		// Compute all minimal segments
-		for (Segment s : implicitSegments) {
-			for (Segment t : givenSegments) {
-				if (s.HasSubSegment(t)) {
-					break;
-				}
+		{
+			Set<Segment> allMinimalSegments = new HashSet<Segment>();
+
+			allMinimalSegments.addAll(implicitSegments);
+			allMinimalSegments.addAll(givenSegments);
+
+
+			// remove a seg from givenSeg if an implicit pt is on it (not end pt)
+			for (Segment seg : givenSegments)
+			{
+				for (Point pt : implicitPoints)
+				{
+					if (seg.pointLiesBetweenEndpoints(pt)) allMinimalSegments.remove(seg);
+				}	
 			}
-			minimalSegments.add(s);
+
+			return allMinimalSegments;
 		}
-		return minimalSegments;
 	}
 
 
 
 	// Compute all implicit segments attributed to implicit points
 	public Set<Segment> computeImplicitBaseSegments(Set<Point> implicitPoints) {
-		Set<Segment> implicitSegments = new HashSet<>();
+		Set<Segment> implicitBaseSegments = new LinkedHashSet<Segment>();
 
-		// For each pair of implicit points, create a segment
-		for (Point p1 : implicitPoints) {
-			for (Point p2 : implicitPoints) {
-				implicitSegments.add(new Segment(p1, p2));
+		for (Segment seg : _givenSegments)
+		{
+			SortedSet<Point> ptList = new TreeSet<Point>();
+
+			Point left = seg.getPoint1(); 
+			Point right = seg.getPoint2();
+
+			ptList.add(left);
+			ptList.addAll(seg.collectOrderedPointsOnSegment(implicitPoints));
+			ptList.add(right);
+
+			Point[] ptArr = ptList.toArray(new Point[ptList.size()]);
+
+			for (int x = 0; x < ptArr.length - 1; x++)
+			{
+				Segment newSeg = new Segment(ptArr[x], ptArr[x+1]);
+				if(!_givenSegments.contains(newSeg))
+					implicitBaseSegments.add(newSeg);
 			}
 		}
-		return implicitSegments;
+		return implicitBaseSegments;
 	}
 
 

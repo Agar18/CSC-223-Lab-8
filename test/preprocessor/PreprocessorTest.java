@@ -14,6 +14,7 @@ import geometry_objects.Segment;
 import geometry_objects.points.Point;
 import geometry_objects.points.PointDatabase;
 import input.InputFacade;
+import input.components.ComponentNode;
 import input.components.FigureNode;
 import preprocessor.delegates.ImplicitPointPreprocessor;
 
@@ -23,9 +24,11 @@ class PreprocessorTest
 	void test_implicit_crossings()
 	{
 		                                 // TODO: Update this file path for your particular project
-		FigureNode fig = InputFacade.extractFigure("fully_connected_irregular_polygon.json");
-
-		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation(fig);
+		String figureStr = utilities.io.FileUtilities.readFileFilterComments("fully_connected_irregular_polygon.json");
+		
+		ComponentNode node = InputFacade.extractFigure(figureStr);
+		
+		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation((FigureNode) node);
 
 		PointDatabase points = pair.getKey();
 
@@ -36,8 +39,7 @@ class PreprocessorTest
 		// 5 new implied points inside the pentagon
 		Set<Point> iPoints = ImplicitPointPreprocessor.compute(points, new ArrayList<Segment>(segments));
 		assertEquals(5, iPoints.size());
-
-		System.out.println(iPoints);
+		
 
 		//
 		//
@@ -94,7 +96,6 @@ class PreprocessorTest
 
 		for (Segment iSegment : iSegments)
 		{
-			System.out.print(expectedISegments);
 			assertTrue(expectedISegments.contains(iSegment));
 		}
 

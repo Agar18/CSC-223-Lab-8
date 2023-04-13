@@ -1,22 +1,17 @@
 package input;
 
-import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+
 import java.util.AbstractMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Set;
 
+import geometry_objects.Segment;
 import geometry_objects.points.Point;
 import geometry_objects.points.PointDatabase;
-import geometry_objects.Segment;
-import input.builder.DefaultBuilder;
+
 import input.builder.GeometryBuilder;
-import input.components.ComponentNode;
 import input.components.FigureNode;
 import input.components.point.PointNode;
 import input.components.segment.SegmentNode;
@@ -29,70 +24,59 @@ public class InputFacade
 	 *     Constructs a parser
 	 *     Acquries an input file string.
 	 *     Parses the file.
-	 *
+     *
 	 * @param filepath -- the path/name defining the input file
 	 * @return a FigureNode object corresponding to the input file.
 	 */
-	public static FigureNode extractFigure(String filepath) {
-		JSONParser parser = new JSONParser(new GeometryBuilder());
-
-		String figureStr = utilities.io.FileUtilities.readFileFilterComments(filepath);
-
-		return (FigureNode) parser.parse(figureStr);
+	public static FigureNode extractFigure(String filepath)
+	{
+        JSONParser parser = new JSONParser(new GeometryBuilder());
+        
+        return (FigureNode) parser.parse(filepath);
 	}
-
+	
 	/**
 	 * 1) Convert the PointNode and SegmentNode objects to a Point and Segment objects 
 	 *    (those classes have more meaningful, geometric functionality).
 	 * 2) Return the points and segments as a pair.
-	 *
+     *
 	 * @param fig -- a populated FigureNode object corresponding to a geometry figure
 	 * @return a point database and a set of segments
 	 */
 	public static Map.Entry<PointDatabase, Set<Segment>> toGeometryRepresentation(FigureNode fig)
 	{
-		// create db and populate it
+		
 		PointDatabase pointDatabase = new PointDatabase();
-		createPointDatabase(pointDatabase, fig);
 		
-		// create segment set and populate it
-		Set<Segment> segments = new HashSet<>();
-		createSegmentSet(segments, fig);
+		// For each PointNode, add the corresponding Point to the database.
+		for(PointNode pointNode : fig.getPointsDatabase().getPoints())
+		{
+			pointDatabase.put(pointNode.getName(), pointNode.getX(), pointNode.getY());
+		}
 		
-		return new AbstractMap.SimpleEntry<>(pointDatabase, segments);
-	}
-	
-	private static void createPointDatabase(PointDatabase db, FigureNode fn)
-	{
-		for(PointNode pointNode : fn.getPointsDatabase()) 
+		
+		LinkedHashSet<Segment> segments = new LinkedHashSet<Segment>();
+		
+		// For each SegmentNode, convert it to a Segment and add it to the set
+		for(SegmentNode segmentNode : fig.getSegments().asUniqueSegmentList())
 		{
-			Point point = toPoint(pointNode);
-			
-			db.put(point.getName(), point.getX(), point.getY());
+			segments.add(convertToGeometricSegment(segmentNode));
 		}
+		
+		
+		return new AbstractMap.SimpleEntry<PointDatabase, Set<Segment>>(pointDatabase, segments);
 	}
-	
-	private static void createSegmentSet(Set<Segment> segSet, FigureNode fn)
+    
+	private static Segment convertToGeometricSegment(SegmentNode segmentNode)
 	{
-		for (SegmentNode segmentNode : fn.getSegments().asSegmentList()) 
-		{
-			Segment segment = toSegment(segmentNode);
-			segSet.add(segment);
-		}
+		Point p1 = convertToGeometricPoint(segmentNode.getPoint1());
+		Point p2 = convertToGeometricPoint(segmentNode.getPoint2());
+		
+		return new Segment(p1, p2);
 	}
-
-	private static Point toPoint(PointNode input) 
+		
+	private static Point convertToGeometricPoint(PointNode pointNode)
 	{
-	    double x = input.getX();
-	    double y = input.getY();
-	    return new Point(x, y);
-	}
-	
-	private static Segment toSegment(SegmentNode input) 
-	{
-	    Point p1 = new Point(input.getPoint1().getX(), input.getPoint1().getY());
-	    Point p2 = new Point(input.getPoint2().getX(), input.getPoint2().getY());
-	    
-	    return new Segment(p1, p2);
+		return new Point(pointNode.getName(), pointNode.getX(), pointNode.getY());
 	}
 }
