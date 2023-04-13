@@ -34,7 +34,12 @@ public class Segment extends GeometricObject
 		_point1 = p1;
 		_point2 = p2;
 	}
-
+	 public Point[] getPoints() {
+	        Point[] points = new Point[2];
+	        points[0] = _point1;
+	        points[1] = _point2;
+	        return points;
+	    }
 	/*
 	 * @param that -- a segment (as a segment: finite)
 	 * @return the midpoint of this segment (finite)
