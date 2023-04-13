@@ -29,6 +29,10 @@ public class ImplicitPointPreprocessor
         for (Segment segment : givenSegments) {
             // Iterate through the other segments in the list
             for (Segment otherSegment : givenSegments) {
+                // Skip checking intersection with itself
+                if (segment.equals(otherSegment)) {
+                    continue;
+                }
              // Check for intersection
                 Point intersectingPoint = segment.segmentIntersection(otherSegment);
                 if (intersectingPoint != null) {

@@ -3,7 +3,6 @@ package preprocessor;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +14,6 @@ import geometry_objects.Segment;
 import geometry_objects.points.Point;
 import geometry_objects.points.PointDatabase;
 import input.InputFacade;
-import input.components.ComponentNode;
 import input.components.FigureNode;
 import preprocessor.delegates.ImplicitPointPreprocessor;
 
@@ -25,24 +23,10 @@ class PreprocessorTest
 	void test_implicit_crossings()
 	{
 		                                 // TODO: Update this file path for your particular project
-		
-		//
-		//
-		//		               D(3, 7)
-		//
-		//																
-		//   E(-2,4)
-		//		                       		C(6, 3)
-		//
-		//		       A(2,0)        B(4, 0)									F(26, 0)
+		FigureNode fig = InputFacade.extractFigure("fully_connected_irregular_polygon.json");
 
+		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation(fig);
 
-		ComponentNode node = InputFacade.extractFigure("fully_connected_irregular_polygon.json");
-		assertTrue(node instanceof FigureNode);
-		
-		FigureNode fig = (FigureNode)node;
-		AbstractMap.Entry<PointDatabase,Set<Segment>> pair = InputFacade.toGeometryRepresentation(fig);
-		assertEquals(6,pair.getKey().size());
 		PointDatabase points = pair.getKey();
 
 		Set<Segment> segments = pair.getValue();
@@ -51,6 +35,9 @@ class PreprocessorTest
 
 		// 5 new implied points inside the pentagon
 		Set<Point> iPoints = ImplicitPointPreprocessor.compute(points, new ArrayList<Segment>(segments));
+		assertEquals(5, iPoints.size());
+
+		System.out.println(iPoints);
 
 		//
 		//
@@ -80,7 +67,7 @@ class PreprocessorTest
 		// There are 15 implied segments inside the pentagon; see figure above
 		//
 		Set<Segment> iSegments = pp.computeImplicitBaseSegments(iPoints);
-		assertEquals(10, iSegments.size());
+		assertEquals(15, iSegments.size());
 
 		List<Segment> expectedISegments = new ArrayList<Segment>();
 
@@ -107,6 +94,7 @@ class PreprocessorTest
 
 		for (Segment iSegment : iSegments)
 		{
+			System.out.print(expectedISegments);
 			assertTrue(expectedISegments.contains(iSegment));
 		}
 

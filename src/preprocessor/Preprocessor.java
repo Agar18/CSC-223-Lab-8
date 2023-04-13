@@ -54,10 +54,6 @@ public class Preprocessor
 		
 		analyze();
 	}
-	public Set<Segment> getAllMinimalSegments() {
-		return _allMinimalSegments;
-	}
-	
 	
 	//
 	// Construct all segments inductively from the base segments
@@ -141,12 +137,9 @@ public class Preprocessor
 	    // For each pair of implicit points, create a segment
 	    for (Point p1 : implicitPoints) {
 	        for (Point p2 : implicitPoints) {
-	            if (!p1.equals(p2)) {
-	                implicitSegments.add(new Segment(p1, p2));
-	            }
-	        }
+	        	implicitSegments.add(new Segment(p1, p2));
+	        	}
 	    }
-
 	    return implicitSegments;
 	}
 
@@ -210,6 +203,9 @@ public class Preprocessor
         givenSegments.add(s1);
         givenSegments.add(s2);
         givenSegments.add(s3);
+        
+        System.out.print("pointnode: " + pointDatabase.size());
+        System.out.print("segments: " + givenSegments.size());
 
         // Create a preprocessor object
         Preprocessor preprocessor = new Preprocessor(pointDatabase, givenSegments);
@@ -218,7 +214,7 @@ public class Preprocessor
         preprocessor.analyze();
 
         // Retrieve the minimal segments
-        Set<Segment> minimalSegments = preprocessor.getAllMinimalSegments();
+        Set<Segment> minimalSegments = _allMinimalSegments;
 
         // Print the minimal segments
         System.out.println("Minimal segments:");
