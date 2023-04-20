@@ -11,7 +11,10 @@
 
 package geometry_objects.angle.comparators;
 
+import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
 
 import geometry_objects.Segment;
 import geometry_objects.angle.Angle;
@@ -56,10 +59,43 @@ public class AngleStructureComparator implements Comparator<Angle>
  	 *              0 indicates an inconclusive result
 	 *              -1 for less than
 	 *              1 for greater than
+	 *              change
 	 */
 	@Override
-	public int compare(Angle left, Angle right)
-	{
-        // TODO
+	public int compare(Angle left, Angle right) {
+	    // check if left and right are the same angle
+	    if (left.equals(right)) {
+	        return 0;
+	    }
+	    
+	    if (right == null) {
+	        return -STRUCTURALLY_INCOMPARABLE;
+	    }
+	    
+	    // get the sets of segments that define each angle
+	    Set<Segment> leftSegments = new HashSet<>(Arrays.asList(left.getRay1(), left.getRay2()));
+	    
+	    Set<Segment> rightSegments = new HashSet<>(Arrays.asList(right.getRay1(), right.getRay2()));
+	    
+	    // check if left is a subset of right
+	    if (rightSegments.containsAll(leftSegments)) {
+	        return -1;
+	    }
+	    
+	    // check if right is a subset of left
+	    if (leftSegments.containsAll(rightSegments)) {
+	        return 1;
+	    }
+	    
+	    // check if there is an inconclusive relationship between the two angles
+	    Set<Segment> intersection = new HashSet<>(leftSegments);
+	    intersection.retainAll(rightSegments);
+	    if (intersection.isEmpty()) {
+	        return 0;
+	    }
+	    
+	    // inconclusive relationship
+	    return STRUCTURALLY_INCOMPARABLE;
 	}
+
 }
