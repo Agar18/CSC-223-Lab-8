@@ -84,10 +84,7 @@ public class LinkedEquivalenceClass<T>
 	 *	Returns whether a target element is contained in the equivalence class 
 	 */
 	public boolean contains(T target)
-	{
-		// If the class is empty or the element does not belong, then it is not in the class.
-		if(isEmpty() || !belongs(target)) return false;
-		
+	{	
 		// Check if the element is the canonical element.
 		if(_canonical.equals(target)) return true;
 		

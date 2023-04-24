@@ -62,40 +62,17 @@ public class AngleStructureComparator implements Comparator<Angle>
 	 *              change
 	 */
 	@Override
-	public int compare(Angle left, Angle right) {
-	    // check if left and right are the same angle
-	    if (left.equals(right)) {
-	        return 0;
-	    }
-	    
-	    if (right == null) {
-	        return -STRUCTURALLY_INCOMPARABLE;
-	    }
-	    
-	    // get the sets of segments that define each angle
-	    Set<Segment> leftSegments = new HashSet<>(Arrays.asList(left.getRay1(), left.getRay2()));
-	    
-	    Set<Segment> rightSegments = new HashSet<>(Arrays.asList(right.getRay1(), right.getRay2()));
-	    
-	    // check if left is a subset of right
-	    if (rightSegments.containsAll(leftSegments)) {
-	        return -1;
-	    }
-	    
-	    // check if right is a subset of left
-	    if (leftSegments.containsAll(rightSegments)) {
-	        return 1;
-	    }
-	    
-	    // check if there is an inconclusive relationship between the two angles
-	    Set<Segment> intersection = new HashSet<>(leftSegments);
-	    intersection.retainAll(rightSegments);
-	    if (intersection.isEmpty()) {
-	        return 0;
-	    }
-	    
-	    // inconclusive relationship
-	    return STRUCTURALLY_INCOMPARABLE;
+	public int compare(Angle left, Angle right)
+	{
+		//overlays has a vertex check build in
+		if (!left.overlays(right)) return STRUCTURALLY_INCOMPARABLE;
+		
+		if (left.getRay1().length() >= right.getRay1().length() &&
+				left.getRay2().length() >= right.getRay2().length()) return 1;
+		
+		if (left.getRay1().length() <= right.getRay1().length() &&
+				left.getRay2().length() <= right.getRay2().length()) return -1;
+		
+		return 0;
 	}
-
 }
