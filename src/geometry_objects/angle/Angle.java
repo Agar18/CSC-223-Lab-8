@@ -41,12 +41,15 @@ public class Angle implements Comparable<Angle>
 		initAngle(vertex, ray1, ray2);
 	}
 	
+	
+	
 	/**
 	 * Common initialization routine for angles
 	 * @param a -- A point defining the angle.
 	 * @param b --  A point defining the angle. This is the vertex point.
 	 * @param c --  A point defining the angle.
 	 */
+	
 	private void initAngle(Point vertex, Segment r1, Segment r2) throws FactException
 	{
 		Point other1 = r1.other(vertex);
@@ -66,6 +69,7 @@ public class Angle implements Comparable<Angle>
 
 		if (_measure <= 0) throw new FactException("Measure of " + this.toString() + " is ZERO");
 	}
+	
 	
 	/**
 	 * Find the measure of the angle (in radians) specified by the three points.
@@ -173,6 +177,15 @@ public class Angle implements Comparable<Angle>
 	@Override
 	public boolean equals(Object obj)
 	{
-		// TODO
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (!(obj instanceof Angle)) return false;
+		
+		Angle that = (Angle) obj;
+		
+		// Check if rays are equal in any order
+		return (_vertex.equals(that._vertex) &&
+	            ((_ray1Endpoint.equals(that._ray1Endpoint) && _ray2Endpoint.equals(that._ray2Endpoint)) ||
+	             (_ray1Endpoint.equals(that._ray2Endpoint) && _ray2Endpoint.equals(that._ray1Endpoint))));
 	}
 }

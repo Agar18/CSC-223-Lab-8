@@ -18,10 +18,15 @@ public class Segment extends GeometricObject
 
 	protected double _length;
 	protected double _slope;
+	
 
 	public Point getPoint1() { return _point1; }
 	public Point getPoint2() { return _point2; }
-	public double length() { return _length; }
+	public double length() {
+	    double dx = _point2.getX() - _point1.getX();
+	    double dy = _point2.getY() - _point1.getY();
+	    return Math.sqrt(dx*dx + dy*dy);
+	}
 	public double slope()
 	{
 		try { return GeometryUtilities.slope(_point1, _point2); }
@@ -246,4 +251,19 @@ public class Segment extends GeometricObject
 		return GeometryUtilities.between(otherL, shared, otherR) ||
 				GeometryUtilities.between(otherR, shared, otherL);
 	}
+	
+	public int compareTo(Segment that) {
+	    if (that == null) {
+	        throw new NullPointerException("Cannot compare to null object");
+	    }
+	    
+	    if (this.length() < that.length()) {
+	        return -1;
+	    } else if (this.length() > that.length()) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
+
 }

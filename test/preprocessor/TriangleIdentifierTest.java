@@ -15,6 +15,7 @@ import geometry_objects.Segment;
 import geometry_objects.Triangle;
 import geometry_objects.points.Point;
 import geometry_objects.points.PointDatabase;
+import input.components.ComponentNode;
 import input.components.FigureNode;
 import input.InputFacade;
 
@@ -26,9 +27,12 @@ class TriangleIdentifierTest
 	
 	protected void init(String filename)
 	{
-		FigureNode fig = InputFacade.extractFigure("crossing_symmetric_triangle.json");
+		
+		String figureStr = utilities.io.FileUtilities.readFileFilterComments("crossing_symmetric_triangle.json");
 
-		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation(fig);
+		ComponentNode node = InputFacade.extractFigure(figureStr);
+
+		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation((FigureNode) node);
 
 		_points = pair.getKey();
 
@@ -37,7 +41,10 @@ class TriangleIdentifierTest
 		_pp.analyze();
 
 		_segments = _pp.getAllSegments();
+		
 	}
+	
+	
 	
 	//      A                                 
 	//     / \                                
@@ -52,10 +59,13 @@ class TriangleIdentifierTest
 	void test_crossing_symmetric_triangle()
 	{
 		init("crossing_symmetric_triangle.json");
+		
 
 		TriangleIdentifier triIdentifier = new TriangleIdentifier(_segments);
+		
 
 		Set<Triangle> computedTriangles = triIdentifier.getTriangles();
+		System.out.print(computedTriangles.size());
 
 		System.out.println(computedTriangles);
 
@@ -79,6 +89,7 @@ class TriangleIdentifierTest
 		// Implied minimal segments: 4 in this figure.
 		//
 		Point a_star = _points.getPoint(3,3);
+		System.out.print(_points.getPoint(3,3));
 
 		Segment a_star_b = new Segment(a_star, _points.getPoint("B"));
 		Segment a_star_c = new Segment(a_star, _points.getPoint("C"));

@@ -13,6 +13,8 @@ import java.util.Comparator;
 * @date 02/11/2023
 */
 
+
+
 public class LinkedEquivalenceClass<T>
 {
 	protected T _canonical;
@@ -25,6 +27,7 @@ public class LinkedEquivalenceClass<T>
 		_comparator = comparator;
 		_rest = new LinkedList<T>();
 	}
+	
 	
 	/**
 	 *	Returns the canonical element for the equivalence class.
@@ -43,6 +46,7 @@ public class LinkedEquivalenceClass<T>
 	{
 		_canonical = null;
 		clearNonCanonical();
+
 	}
 	
 	/**
@@ -149,6 +153,7 @@ public class LinkedEquivalenceClass<T>
 		_canonical = element;
 		return true;
 	}
+	
 	
 	/**
 	 *	Returns a string representation of the equivalence class.

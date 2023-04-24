@@ -18,6 +18,7 @@ public class EquivalenceClasses<T>
 		_classes = new ArrayList<LinkedEquivalenceClass<T>>();
 		
 	}
+
 	
 	// need to make a new list with a new equivalence class to fit it
 	
@@ -28,7 +29,6 @@ public class EquivalenceClasses<T>
 		if(eqIndex != -1) {
 			
 			return _classes.get(eqIndex).add(element);
-			
 		}
 		
 		LinkedEquivalenceClass<T> list = new LinkedEquivalenceClass<T>(_comparator);
@@ -38,6 +38,7 @@ public class EquivalenceClasses<T>
 		return list.add(element);
 		
 	}
+	
 	
 	public boolean contains(T element) {
 		
@@ -70,6 +71,7 @@ public class EquivalenceClasses<T>
 		return _classes.size();
 		
 	}
+
 	
 	protected int indexOfClass(T element) {
 		

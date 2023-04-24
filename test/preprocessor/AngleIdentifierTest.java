@@ -17,6 +17,7 @@ import geometry_objects.angle.AngleEquivalenceClasses;
 import geometry_objects.points.Point;
 import geometry_objects.points.PointDatabase;
 import input.components.FigureNode;
+import input.components.ComponentNode;
 import input.InputFacade;
 
 class AngleIdentifierTest
@@ -27,9 +28,11 @@ class AngleIdentifierTest
 	
 	protected void init(String filename)
 	{
-		FigureNode fig = InputFacade.extractFigure("crossing_symmetric_triangle.json");
+		String figureStr = utilities.io.FileUtilities.readFileFilterComments("crossing_symmetric_triangle.json");
 
-		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation(fig);
+		ComponentNode node = InputFacade.extractFigure(figureStr);
+
+		Map.Entry<PointDatabase, Set<Segment>> pair = InputFacade.toGeometryRepresentation((FigureNode) node);
 
 		_points = pair.getKey();
 
@@ -38,6 +41,7 @@ class AngleIdentifierTest
 		_pp.analyze();
 
 		_segments = _pp.getAllSegments();
+		System.out.print(_segments);
 	}
 	
 	//      A                                 
@@ -59,7 +63,9 @@ class AngleIdentifierTest
 		AngleEquivalenceClasses computedAngles = angleIdentifier.getAngles();
 
 		// The number of classes should equate to the number of 'minimal' angles
+		
 		assertEquals("Number of Angle Equivalence classes", 25, computedAngles.numClasses());
+		//java.lang.AssertionError: Number of Angle Equivalence classes expected:<25> but was:<6>
 		
 		//
 		// ALL original segments: 8 in this figure.

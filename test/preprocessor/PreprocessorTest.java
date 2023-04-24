@@ -1,6 +1,7 @@
 package preprocessor;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
@@ -32,6 +33,7 @@ class PreprocessorTest
 		//
 		// There are 4 implied segments inside the figure above
 		//
+		
 
 		String figureStr = utilities.io.FileUtilities.readFileFilterComments("crossing_symmetric_triangle.json");
 
