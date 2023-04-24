@@ -58,6 +58,9 @@ public class Preprocessor
 
 		analyze();
 	}
+	
+	
+	
 
 	//
 	// Construct all segments inductively from the base segments
@@ -168,6 +171,7 @@ public class Preprocessor
 	    }
 	    return implicitBaseSegments; // Return the set of implicit base segments
 	}
+	
 
 
 
@@ -202,5 +206,6 @@ public class Preprocessor
 		//
 		_allMinimalSegments.forEach((segment) -> _segmentDatabase.put(segment, segment));
 		_nonMinimalSegments.forEach((segment) -> _segmentDatabase.put(segment, segment));
+		 
 	}
 }

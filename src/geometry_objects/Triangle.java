@@ -25,6 +25,7 @@ public class Triangle
 		setTriangle(segs);
 	}
 	
+	
 	/**
 	 * Determine if these 3 segments constitute a legitimate triangle.
 	 * A legitimate triangle is built from 3 segments that properly share endpoints.
