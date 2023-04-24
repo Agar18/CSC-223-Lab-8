@@ -29,7 +29,7 @@ public class AngleIdentifier
 	{
 		if (_angles != null) return _angles;
 
-		_angles = new AngleEquivalenceClasses(new AngleStructureComparator());
+		_angles = new AngleEquivalenceClasses();
 		
 
 		computeAngles();
