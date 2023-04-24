@@ -1,16 +1,3 @@
-package geometry_objects.angle.comparators;
-import java.util.Set;
-
-
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.HashSet;
-import geometry_objects.Segment;
-import geometry_objects.angle.Angle;
-import geometry_objects.points.Point;
-import utilities.math.MathUtilities;
-import utilities.math.analytic_geometry.GeometryUtilities;
-
 /**
  * Write a succinct, meaningful description of the class here. You should avoid wordiness    
  * and redundancy. If necessary, additional paragraphs should be preceded by <p>,
@@ -20,8 +7,20 @@ import utilities.math.analytic_geometry.GeometryUtilities;
  *
  * @author <your name>
  * @date   <date of completion>
- **/
+ */
 
+package geometry_objects.angle.comparators;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Set;
+
+import geometry_objects.Segment;
+import geometry_objects.angle.Angle;
+import geometry_objects.points.Point;
+import utilities.math.MathUtilities;
+import utilities.math.analytic_geometry.GeometryUtilities;
 
 public class AngleStructureComparator implements Comparator<Angle>
 {
@@ -60,10 +59,8 @@ public class AngleStructureComparator implements Comparator<Angle>
  	 *              0 indicates an inconclusive result
 	 *              -1 for less than
 	 *              1 for greater than
+	 *              change
 	 */
-	
-	
-	
 	@Override
 	public int compare(Angle left, Angle right) {
 	    // check if left and right are the same angle
@@ -100,5 +97,5 @@ public class AngleStructureComparator implements Comparator<Angle>
 	    // inconclusive relationship
 	    return STRUCTURALLY_INCOMPARABLE;
 	}
-	
+
 }
