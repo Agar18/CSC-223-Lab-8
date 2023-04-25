@@ -28,7 +28,7 @@ class AngleIdentifierTest
 	
 	protected void init(String filename)
 	{
-		String figureStr = utilities.io.FileUtilities.readFileFilterComments("crossing_symmetric_triangle.json");
+		String figureStr = utilities.io.FileUtilities.readFileFilterComments(filename);
 
 		ComponentNode node = InputFacade.extractFigure(figureStr);
 
@@ -200,4 +200,17 @@ class AngleIdentifierTest
 			assertTrue(computedAngles.contains(expected));
 		}
 	}
+	@Test
+	void test_Star_triangle()
+	{
+		init("Star_triangles2.json");
+
+		AngleIdentifier angleIdentifier = new AngleIdentifier(_segments);
+
+		AngleEquivalenceClasses computedAngles = angleIdentifier.getAngles();
+
+		// The number of classes should equate to the number of 'minimal' angles
+		assertEquals("Number of Angle Equivalence classes", 25, computedAngles.numClasses());
+	}
+	
 }
