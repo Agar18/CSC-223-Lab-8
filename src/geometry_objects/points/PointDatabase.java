@@ -56,6 +56,7 @@ public class PointDatabase
 	{
 		return getName(getPoint(x, y));
 	}
+	
 	public String getName(Point point)
 	{
 		if(point.isUnnamed()) return null;

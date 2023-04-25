@@ -33,14 +33,19 @@ public class AngleEquivalenceClasses extends EquivalenceClasses<Angle>
 	 */
 	
 	@Override
-	public boolean add(Angle angle) 
+	public boolean add(Angle angle)
 	{
+		// Find the index of the equivalence class to which the angle belongs.
 		int eqIndex = indexOfClass(angle);
+
+		// If the angle belongs to an existing equivalence class, add it to that class and return true.
 		if(eqIndex != -1) return _classes.get(eqIndex).add(angle);
-		
+
+		// If the angle does not belong to an existing equivalence class, create a new class and add it to the list of classes.
 		AngleLinkedEquivalenceClass list = new AngleLinkedEquivalenceClass();
 		_classes.add(list);
-		
+
+		// Add the angle to the new equivalence class and return true.
 		return list.add(angle);
 	}
 }

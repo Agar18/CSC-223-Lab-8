@@ -66,6 +66,7 @@ public class InputFacade
 		
 		return new AbstractMap.SimpleEntry<PointDatabase, Set<Segment>>(pointDatabase, segments);
 	}
+	
     
 	private static Segment convertToGeometricSegment(SegmentNode segmentNode)
 	{
@@ -74,6 +75,7 @@ public class InputFacade
 		
 		return new Segment(p1, p2);
 	}
+	
 		
 	private static Point convertToGeometricPoint(PointNode pointNode)
 	{

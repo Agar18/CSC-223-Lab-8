@@ -19,6 +19,7 @@ public class AngleIdentifier
 	public AngleIdentifier(Map<Segment, Segment> segments)
 	{
 		_segments = segments;
+		
 	}
 
 
@@ -37,25 +38,37 @@ public class AngleIdentifier
 		return _angles;
 	}
 
+	/**
+	Computes the angles between all pairs of non-overlapping segments in the shape.
+	 */
 	private void computeAngles() {
-		int i = 0;
+		// Initialize a counter variable i to 0.
+		//int i = 0;
+
+		// Loop over all pairs of segments in the shape.
 		for (Segment s1 : _segments.keySet()) {
 			for (Segment s2 : _segments.keySet()) {
+				// Skip if the segments are the same.
 				if (s1 != s2) {
+					// Check if the segments share a vertex.
 					Point shared = s1.sharedVertex(s2);
 					if (shared != null) {
 						try {
+							// Compute the angle between the two segments and add it to the angle set if it doesn't already exist.
 							Angle angle = new Angle(s1, s2);
 							if (!_angles.contains(angle)) {
 								_angles.add(angle);
 							}
 						} catch (FactException e) {
+							// Handle the case where the angle cannot be computed.
 							System.err.println("Error creating angle: " + e.getMessage());
 						}
 					}
 				}
 			}
 		}
+
+		// Print the size of the angle set and the number of equivalence classes.
 		System.out.println("size : " + _angles.size());
 		System.out.println("Number of equivalence classes: " + _angles.numClasses());
 	}
