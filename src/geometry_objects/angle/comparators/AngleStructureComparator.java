@@ -64,7 +64,7 @@ public class AngleStructureComparator implements Comparator<Angle>
 	@Override
 	public int compare(Angle left, Angle right)
 	{
-		//overlays has a vertex check build in
+		
 		if (!left.overlays(right)) return STRUCTURALLY_INCOMPARABLE;
 		
 		if (left.getRay1().length() >= right.getRay1().length() &&

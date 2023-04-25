@@ -46,21 +46,28 @@ public class AngleLinkedEquivalenceClass extends LinkedEquivalenceClass<Angle>
 	 */
     @Override
     public boolean add(Angle angle) {
+        // Check if the equivalence class is empty.
         if (isEmpty()) {
             _canonical = angle;
             return true;
-        } else if (belongs(angle)) {
+        }
+        // If the angle belongs to the equivalence class.
+        else if (belongs(angle)) {
+            // If the angle is structurally smaller than the canonical angle.
             if (_comparator.compare(angle, _canonical) < 0) {
                 // Update the canonical to be the structurally smaller angle.
                 demoteAndSetCanonical(angle);
             } else {
+                // Add the angle to the rest of the list.
                 _rest.addToFront(angle);
             }
             return true;
         } else {
+            // If the angle does not belong to the equivalence class, return false.
             return false;
         }
     }
+
 }
 
 
